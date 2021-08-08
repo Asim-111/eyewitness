@@ -1,0 +1,195 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                      <h4 class="title" style="font-family: flex;">Train Classifier</h4>
+                    </div>
+                    <div class="content">
+                        <mat-horizontal-stepper linear #stepper>
+                            <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+                              <form [formGroup]="firstFormGroup">
+                                <ng-template matStepLabel>Choose Dataset</ng-template>
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Dataset Type</mat-label>
+                                  <mat-select matNativeControl required formControlName="dataset">
+                                    <mat-option value="EarthQuake">EarthQuake</mat-option>
+                                    <mat-option value="Floods">Floods</mat-option>
+                                    <mat-option value="Hurricane">Hurricane</mat-option>
+                                    <mat-option value="WildFire">WildFire</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                                <div class="form-group">
+                                    <label>Upload Dataset</label>
+                                    <div class="input-group">
+                                        <input #csvReader type="file" class="form-control" id="customFile" name="filename" (change)="uploadListener($event)" accept=".csv">
+                                    </div>
+                                </div>
+                                <div>
+                                  <button mat-raised-button color='accent' [disabled]='!enableViewButton' style="margin-right: 4px;" (click)='openDialog()'>View</button>
+                                  <button mat-raised-button color='primary' matStepperNext [disabled]='firstFormGroup.invalid || !enableViewButton'>Next</button>
+                                </div>
+                              </form>
+                            </mat-step>
+                            <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable">
+                                <form [formGroup]="thirdFormGroup">
+                                  <ng-template matStepLabel>Feature Extraction</ng-template>
+                                  <mat-form-field appearance="outline">
+                                      <mat-label>Feature Extraction</mat-label>
+                                      <mat-select matNativeControl required formControlName="feature">
+                                        <mat-option value="Part of Speech Tagging">Part of Speech Tagging</mat-option>
+                                        <mat-option value="Bag of Words Technique">Bag of Words Technique</mat-option>
+                                        <mat-option value="unigram">Uni-gram Technique</mat-option>
+                                        <mat-option value="bigram">Bi-gram Technique</mat-option>
+                                        <mat-option value="Tf-Idf Technique">Tf-Idf Technique</mat-option>
+                                        <mat-option value="Word2vec">Word2vec</mat-option>
+                                      </mat-select>
+                                  </mat-form-field>
+                                  <mat-checkbox 
+                                    id="class-balancing" 
+                                    color="primary"
+                                    formControlName="classBalancing">
+                                    Class Balancing
+                                  </mat-checkbox>
+                                  <div>
+                                    <button mat-raised-button color='accent' matStepperPrevious style="margin-right: 4px;">Back</button>
+                                    <button mat-raised-button color='primary' matStepperNext [disabled]='thirdFormGroup.invalid'>Next</button>
+                                  </div>
+                                </form>
+                            </mat-step>
+                            <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+                              <form [formGroup]="secondFormGroup">
+                                <ng-template matStepLabel>Pre-Processing</ng-template>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Pre-Processing</mat-label>
+                                    <mat-select matNativeControl required formControlName="preprocessing">
+                                      <mat-option value="Stopwords Removal">Stopwords Removal</mat-option>
+                                      <mat-option value="Stopwords + Special Characters">Stopwords + Special Characters</mat-option>
+                                      <mat-option value="Stopwords + Special Characters + Lemmatization" [disabled]='disableP3'>Stopwords + Special Characters + Lemmatization</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <div>
+                                  <button mat-raised-button color='accent' matStepperPrevious style="margin-right: 4px;">Back</button>
+                                  <button mat-raised-button color='primary' matStepperNext [disabled]='secondFormGroup.invalid'>Next</button>
+                                </div>
+                              </form>
+                            </mat-step>
+                            <mat-step [stepControl]="forthFormGroup" [editable]="isEditable">
+                                <form [formGroup]="forthFormGroup">
+                                  <ng-template matStepLabel>Prediction</ng-template>
+                                  <mat-form-field appearance="outline">
+                                      <mat-label>Machine Learning Model</mat-label>
+                                      <mat-select matNativeControl required formControlName="machineLearning">
+                                        <mat-option value="Random Forest">Random Forest</mat-option>
+                                        <mat-option value="Naive Bayes">Naive Bayes</mat-option>
+                                      </mat-select>
+                                  </mat-form-field>
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Validation Techniques</mat-label>
+                                    <mat-select matNativeControl required formControlName="validation">
+                                      <mat-option value="10-fold Cross Validation">10-fold Cross Validation</mat-option>
+                                      <mat-option value="Hold-Out Method">Hold-Out Method</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <div *ngIf='enableSlider'>
+                                    <mat-label>Training Test Split (%)</mat-label>
+                                    <mat-slider
+                                        class="slider"
+                                        [invert]="false"
+                                        [max]="90"
+                                        [min]="50"
+                                        [step]="1"
+                                        [thumbLabel]="true"
+                                        formControlName="slider"
+                                        [vertical]="false">
+                                    </mat-slider>
+                                </div>
+
+                                <div>
+                                    <span class="example-list-section">
+                                        <mat-checkbox class="example-margin"
+                                                      [checked]="allComplete"
+                                                      [color]="task.color"
+                                                      [indeterminate]="someComplete()"
+                                                      (change)="setAll($event.checked)">
+                                          {{task.name}}
+                                        </mat-checkbox>
+                                      </span>
+                                      <span class="example-list-section">
+                                        <ul>
+                                          <li *ngFor="let subtask of task.subtasks;">
+                                            <mat-checkbox 
+                                                [ngModelOptions]="{standalone: true}"
+                                                [color]="subtask.color"
+                                                [(ngModel)]="subtask.completed"
+                                                (change)='updateAllComplete()'>
+                                              {{subtask.name}}
+                                            </mat-checkbox>
+                                          </li>
+                                        </ul>
+                                      </span>
+                                </div>
+                                  <div>
+                                    <button mat-raised-button color='accent' matStepperPrevious style="margin-right: 4px;">Back</button>
+                                    <button mat-raised-button color='primary' matStepperNext [disabled]='forthFormGroup.invalid' (click)='trainModel()'>TRAIN</button>
+                                  </div>
+                                </form>
+                            </mat-step>
+                            <mat-step>
+                              <ng-template matStepLabel>Results</ng-template>
+                              <div *ngIf='response'>
+                                <p>Model has been trained successfully.</p>
+                              </div>
+                              <div style="margin-top: 16px;" *ngIf='displayResults'>
+                                <div id="successAlert">
+                                  <div id='accuracy-div' class="progress" *ngIf='task.subtasks[0].completed'>
+                                      <div id='accuracy-bar' class="progress-bar" role="progress-bar" aria-valuenow=response.accuracy aria-valuemin="0" aria-valuemax="100" [style.width]="response.accuracy + '%'">
+                                          <span class="sr-only">60% Complete</span>
+                                      </div>
+                                      <span class="progress-type">Accuracy</span>
+                                      <span id='accuracy' class="progress-completed">{{response.accuracy}}%</span>
+                                  </div>
+                                  <div id='precision-div' class="progress" *ngIf='task.subtasks[1].completed'>
+                                      <div id='precision-bar' class="progress-bar progress-bar-success" role="progressbar" aria-valuenow=response.precision aria-valuemin="0" aria-valuemax="100" [style.width]="response.precision + '%'">
+                                          <span class="sr-only">40% Complete (success)</span>
+                                      </div>
+                                      <span class="progress-type">Precision</span>
+                                      <span id='precision' class="progress-completed">{{response.precision}}%</span>
+                                  </div>
+                                  <div id='recall-div' class="progress" *ngIf='task.subtasks[2].completed'>
+                                      <div id='recall-bar' class="progress-bar progress-bar-info" role="progressbar" aria-valuenow=response.recall aria-valuemin="0" aria-valuemax="100" [style.width]="response.recall + '%'">
+                                          <span class="sr-only">20% Complete (info)</span>
+                                      </div>
+                                      <span class="progress-type">Recall</span>
+                                      <span id='recall' class="progress-completed">{{response.recall}}%</span>
+                                  </div>
+                                  <div id='f1score-div' class="progress" *ngIf='task.subtasks[3].completed'>
+                                      <div id='f1score-bar' class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow=response.f1score aria-valuemin="0" aria-valuemax="100" [style.width]="response.f1score + '%'">
+                                          <span class="sr-only">60% Complete (warning)</span>
+                                      </div>
+                                      <span class="progress-type">F1-Score</span>
+                                      <span id='f1score' class="progress-completed">{{response.f1score}}%</span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <mat-spinner *ngIf='isSpinner' style="margin:0 auto;"></mat-spinner>
+                              
+                              <div>
+                                <button mat-raised-button color='warn' (click)="stepper.reset(); fileReset()" style="margin-right: 4px;">Reset</button>
+                                <button mat-raised-button color='accent' style="margin-right: 4px;" [disabled]='!response' (click)='onDisplay()'>Display Result</button>
+                                <button mat-raised-button color='primary' [disabled]='!response' (click)='onSave()'>Save Result</button>
+                              </div>
+                            </mat-step>
+                          </mat-horizontal-stepper>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+  

@@ -1,0 +1,79 @@
+.content{
+  font-family: Asimheadings;
+  font-size: large;
+}
+.mat-stepper-horizontal {
+  margin-top: 8px;
+  font-size: x-larges;
+}
+.mat-select{
+  font-family: font1;
+  font-size: large;
+
+
+
+}
+
+.mat-option{
+  font-family: font1;
+  font-size: xx-large;
+}
+
+.mat-form-field {
+  font-family: flex;
+  font-size: large;
+  margin-top: 16px;
+  width: 100% !important;
+}
+.mat-checkbox {
+  font-family: font1;
+}
+
+ul {
+  list-style-type: none;
+  margin-top: 4px;
+  font-size: x-larges;
+}
+
+.slider{
+  width: 100%;
+  margin-top: 12px;
+}
+
+.mat-slider-thumb-label {
+  transform: rotate(45deg) !important;
+  border-radius: 50% 50% 0 !important;
+}  
+.mat-slider-thumb {
+  transform: scale(0) !important;
+}  
+.mat-slider-thumb-label-text {
+  opacity: 1 !important;
+}
+.progress {
+    position: relative;
+	height: 25px;
+  color: gray;
+	/* margin: 8px; */
+}
+.progress-bar{
+    background-color:gray;
+}
+.progress > .progress-type {
+	position: absolute;
+	left: 0px;
+	font-weight: 800;
+	padding: 3px 30px 2px 10px;
+	color: rgb(255, 255, 255);
+	background-color: rgba(25, 25, 25, 0.2);
+}
+.progress > .progress-completed {
+	position: absolute;
+	right: 0px;
+	font-weight: 800;
+	padding: 3px 10px 2px;
+	color: black;
+}
+.title{
+  font-weight: bolder !important;
+}

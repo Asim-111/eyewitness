@@ -1,0 +1,67 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                      <h4 class="title" style="font-family: flex;">Choose Dataset</h4>
+                    </div>
+                    <div class="content">
+                        <form>
+                            <div class="column">
+                                <div>
+                                    <div class="form-group">
+                                        <label>Dataset Type</label>
+                                        <select class="form-control">
+                                            <option selected value="earthquake">EarthQuake</option>
+                                            <option value="flood">Flood</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="form-group">
+                                        <label>Upload Dataset</label>
+                                        <div class="input-group">
+                                            <input #csvReader type="file" class="form-control" id="customFile" name="filename" (change)="uploadListener($event)" accept=".csv">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <button type="submit" class="btn btn-info btn-fill pull-right" (click)='onView()'>VIEW DATA</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="col-md-12" *ngIf="displayTable">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Dataset</h4>
+                        <p class="category">Tweets Data with Label</p>
+                    </div>
+                    <div class="content table-responsive table-full-width" style="max-height: 30vh; overflow-y: auto;">
+                          <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let cell of tableData1.headerRow">{{ cell }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of tableData1.dataRows">
+                                        <td *ngFor="let cell of row">{{cell}}</td>
+                                    </tr>
+                                </tbody>
+                          </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  

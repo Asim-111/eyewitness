@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Dataset View</h1>
+<div mat-dialog-content style="height: 70vh;">
+    <div class="content table-responsive table-full-width">
+        <table class="table table-hover table-striped">
+              <thead>
+                  <tr>
+                      <th *ngFor="let cell of tableData1.headerRow">{{ cell }}</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let row of tableData1.dataRows">
+                      <td *ngFor="let cell of row">{{cell}}</td>
+                  </tr>
+              </tbody>
+        </table>
+
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</div>
